@@ -5,12 +5,33 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
-
   <body>
-    <%= yield %>
+    <div class="container">
+      <% if notice %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= notice %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= alert %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+      <% if current_user %>
+        <%= "Logged in as #{current_user.email}" %>
+        | <%= link_to 'Home', root_path %>
+        | <%= link_to 'Log Out', logout_path, method: :delete %>
+      <% else %>
+        <%= link_to 'Home', root_path %>
+        | <%= link_to 'Log In', login_path %>
+        | <%= link_to 'Sign Up', new_user_path %>
+      <% end %>
+      <%= yield %>
+    </div>
   </body>
 </html>
