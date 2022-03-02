@@ -1,0 +1,24 @@
+<%= form_with(model: reminder) do |form| %>
+  <%= form.hidden_field :user_id, value: @current_user.id %>
+  <div class="mb-3">
+    <%= form.label :title, style: "display: block", class: "form-label" %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :body, style: "display: block", class: "form-label" %>
+    <%= form.text_area :body, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :scheduled_day, style: "display: block", class: "form-label" %>
+    <%= form.select :scheduled_day, 1..31 , class: "form-control" %>
+    <div class="btn btn-secondary btn-sm" onclick="document.getElementById('reminder_scheduled_day').value = 1">First of month</div>
+    <div class="btn btn-secondary btn-sm" onclick="document.getElementById('reminder_scheduled_day').value = 31">Last of month</div>
+  </div>
+  <div class="mb-3">
+    <%= form.label :scheduled_time, style: "display: block", class: "form-label" %>
+    <%= form.time_select :scheduled_time, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

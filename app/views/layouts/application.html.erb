@@ -10,18 +10,6 @@
   </head>
   <body>
     <div class="container">
-      <% if notice %>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <%= notice %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <% end %>
-      <% if alert %>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <%= alert %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <% end %>
       <% if current_user %>
         <%= "Logged in as #{current_user.email}" %>
         | <%= link_to 'Home', root_path %>
@@ -30,6 +18,18 @@
         <%= link_to 'Home', root_path %>
         | <%= link_to 'Log In', login_path %>
         | <%= link_to 'Sign Up', new_user_path %>
+      <% end %>
+      <% if notice %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= notice %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= flash[:alert] %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
       <% end %>
       <%= yield %>
     </div>
