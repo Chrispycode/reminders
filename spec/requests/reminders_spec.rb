@@ -34,23 +34,6 @@ RSpec.describe "/reminders", type: :request do
     end
   end
 
-  describe "GET /show" do
-    it "renders a successful response" do
-      reminder = Reminder.create! valid_attributes
-      get reminder_url(reminder)
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /show as different user" do
-    it "renders a successful response" do
-      reminder = Reminder.create! valid_attributes
-      login(create(:user))
-      get reminder_url(reminder)
-      expect(response).to eq(401)
-    end
-  end
-
   describe "GET /new" do
     it "renders a successful response" do
       get new_reminder_url
@@ -76,7 +59,7 @@ RSpec.describe "/reminders", type: :request do
 
       it "redirects to the created reminder" do
         post reminders_url, params: { reminder: valid_attributes }
-        expect(response).to redirect_to(reminder_url(Reminder.last))
+        expect(response).to redirect_to(edit_reminder_url(Reminder.last))
       end
     end
 
@@ -113,7 +96,7 @@ RSpec.describe "/reminders", type: :request do
         reminder = Reminder.create! valid_attributes
         patch reminder_url(reminder), params: { reminder: new_attributes }
         reminder.reload
-        expect(response).to redirect_to(reminder_url(reminder))
+        expect(response).to redirect_to(edit_reminder_url(reminder))
       end
     end
 

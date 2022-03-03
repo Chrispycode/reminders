@@ -20,4 +20,12 @@ RSpec.describe Reminder, type: :model do
   it "must have a scheduled_time" do
     expect(build(:reminder, scheduled_time: "")).to_not be_valid
   end
+
+  describe "#scheduled_date" do
+    let(:reminder) {create(:reminder)}
+
+    it "returns a DateTime object" do
+      expect(reminder.scheduled_date).to be_a DateTime
+    end
+  end
 end

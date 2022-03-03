@@ -9,19 +9,45 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
   <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="navbar">
+      <div class="container">
+        <div class="navbar-brand">
+          <%= link_to root_path, class: "btn btn-dark btn-lg" do %>
+            <i class="bi bi-calendar-week" aria-hidden="true"></i>
+          <% end %>
+          <%= link_to new_reminder_path, class: "btn btn-primary" do %>
+            <i class="bi bi-plus"></i>
+          <% end %>
+        </div>
+        <div class="d-flex">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbar">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <% if current_user %>
+                <li class="nav-item">
+                  <a class="nav-link disabled"><%= "Logged in as #{current_user.email}" %></a>
+                </li>
+                <li class="nav-item align-right">
+                  <%= link_to 'Log Out', logout_path, method: :delete, class: "nav-link" %>
+                </li>
+              <% else %>
+                <li class="nav-item d-flex">
+                  <%= link_to 'Login', login_path, class: "btn btn-outline-primary me-2" %>
+                  <%= link_to 'Sign-up', new_user_path, class: "btn btn-primary" %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
     <div class="container">
-      <% if current_user %>
-        <%= "Logged in as #{current_user.email}" %>
-        | <%= link_to 'Home', root_path %>
-        | <%= link_to 'Log Out', logout_path, method: :delete %>
-      <% else %>
-        <%= link_to 'Home', root_path %>
-        | <%= link_to 'Log In', login_path %>
-        | <%= link_to 'Sign Up', new_user_path %>
-      <% end %>
-      <% if notice %>
+      <% if flash[:notice] %>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <%= notice %>
+            <%= flash[:notice] %>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       <% end %>

@@ -1,22 +1,18 @@
-<div id="<%= dom_id reminder %>">
-  <p>
-    <strong>Title:</strong>
-    <%= reminder.title %>
-  </p>
-
-  <p>
-    <strong>Body:</strong>
-    <%= reminder.body %>
-  </p>
-
-  <p>
-    <strong>Scheduled time:</strong>
-    <%= reminder.scheduled_time %>
-  </p>
-
-  <p>
-    <strong>Scheduled day:</strong>
-    <%= reminder.scheduled_day %>
-  </p>
-
+<div class="card" id="<%= dom_id reminder %>">
+    <div class="d-flex justify-content-end">
+      <%= link_to edit_reminder_path(reminder), class: "btn" do %>
+        <i class="bi bi-pencil"></i>
+      <% end %>
+    </div>
+  <div class="card-body">
+    <h5 class="card-title">
+      <%= reminder.title %>
+    </h5>
+    <div class="card-text"><%= reminder.body %></div>
+  </div>
+  <div class="card-footer">
+    <small class="text-muted">
+      <%= "Scheduled for #{reminder.scheduled_date.to_fs(:short)}" %>
+    </small>
+  </div>
 </div>

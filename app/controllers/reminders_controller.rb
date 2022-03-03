@@ -1,5 +1,5 @@
 class RemindersController < ApplicationController
-  before_action :set_reminder, :authorize_access, only: %i[ show edit update destroy ]
+  before_action :set_reminder, :authorize_access, only: %i[ edit update destroy ]
   before_action :authorize
 
   def index
@@ -18,7 +18,7 @@ class RemindersController < ApplicationController
     @reminder = Reminder.new(reminder_params)
 
     if @reminder.save
-      redirect_to reminder_url(@reminder), notice: "Reminder was successfully created."
+      redirect_to edit_reminder_url(@reminder), notice: "Reminder was successfully created."
     else
       flash.now.alert = @reminder.better_errors
       render :new, status: :unprocessable_entity
@@ -27,7 +27,7 @@ class RemindersController < ApplicationController
 
   def update
     if @reminder.update(reminder_params)
-      redirect_to reminder_url(@reminder), notice: "Reminder was successfully updated."
+      redirect_to edit_reminder_url(@reminder), notice: "Reminder was successfully updated."
     else
       flash.now.alert = @reminder.better_errors
       render :edit, status: :unprocessable_entity

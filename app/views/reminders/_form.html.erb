@@ -6,19 +6,26 @@
   </div>
   <div class="mb-3">
     <%= form.label :body, style: "display: block", class: "form-label" %>
-    <%= form.text_area :body, class: "form-control" %>
+    <%= form.text_area :body, class: "form-control", rows: "4" %>
   </div>
   <div class="mb-3">
     <%= form.label :scheduled_day, style: "display: block", class: "form-label" %>
-    <%= form.select :scheduled_day, 1..31 , class: "form-control" %>
-    <div class="btn btn-secondary btn-sm" onclick="document.getElementById('reminder_scheduled_day').value = 1">First of month</div>
-    <div class="btn btn-secondary btn-sm" onclick="document.getElementById('reminder_scheduled_day').value = 31">Last of month</div>
+    <div class="input-group">
+      <div class="btn btn-secondary btn-sm" onclick="document.getElementById('reminder_scheduled_day').value = 1">
+        <i class="bi bi-chevron-bar-left"></i>First of month
+      </div>
+      <%= form.select :scheduled_day, 1..31 , class: "form-control" %>
+      <div class="btn btn-secondary btn-sm" onclick="document.getElementById('reminder_scheduled_day').value = 31">
+        Last of month<i class="bi bi-chevron-bar-right"></i>
+      </div>
+    </div>
   </div>
   <div class="mb-3">
     <%= form.label :scheduled_time, style: "display: block", class: "form-label" %>
     <%= form.time_select :scheduled_time, class: "form-control" %>
   </div>
   <div class="mb-3">
+    <%= link_to "Back", root_path, class: "btn btn-secondary" %>
     <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>

@@ -1,12 +1,7 @@
 <h1>Reminders</h1>
 
-<div id="reminders">
+<div class="row" id="reminders">
   <% @reminders&.each do |reminder| %>
-    <%= render reminder %>
-    <p>
-      <%= link_to "Show this reminder", reminder %>
-    </p>
+    <div class="col-sm-4"><%= render reminder %></div>
   <% end %>
 </div>
-
-<%= link_to "New reminder", new_reminder_path %>

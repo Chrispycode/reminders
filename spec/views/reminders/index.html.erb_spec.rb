@@ -10,9 +10,8 @@ RSpec.describe "reminders/index", type: :view do
   it "renders a list of reminders" do
     assign(:current_user, user)
     render
-    assert_select "p", text: /MyTitle/, count: 2
-    assert_select "p", text: /MyText/, count: 2
-    assert_select "p", text: /2/, count: 2
-    assert_select "p", text: /15:14:17/, count: 2
+    assert_select "h5", text: /MyTitle/, count: 2
+    assert_select "div.card-text", text: /MyText/, count: 2
+    assert_select "small", text: /Scheduled for \d\d \w\w\w \d\d:\d\d/, count: 2
   end
 end
