@@ -18,7 +18,7 @@ class RemindersController < ApplicationController
     @reminder = Reminder.new(reminder_params)
 
     if @reminder.save
-      ReminderMailer.send_reminder(@reminder).deliver_later(wait_until: @reminder.scheduled_date)
+      Reminder.delay(run_at: @reminder.scheduled_date).send_reminder(@reminder.id)
       redirect_to edit_reminder_url(@reminder), notice: "Reminder was successfully created."
     else
       flash.now.alert = @reminder.better_errors
@@ -28,7 +28,7 @@ class RemindersController < ApplicationController
 
   def update
     if @reminder.update(reminder_params)
-      ReminderMailer.send_reminder(@reminder).deliver_later(wait_until: @reminder.scheduled_date)
+      Reminder.delay(run_at: @reminder.scheduled_date).send_reminder(@reminder.id)
       redirect_to edit_reminder_url(@reminder), notice: "Reminder was successfully updated."
     else
       flash.now.alert = @reminder.better_errors
