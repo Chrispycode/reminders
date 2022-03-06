@@ -6,9 +6,10 @@ class Reminder < ApplicationRecord
   def scheduled_date
     day   = scheduled_day
     month = Time.current.day <= day ? Time.current.month : Time.current.month + 1
-    hour  = scheduled_time.hour
-    min   = scheduled_time.min
-    DateTime.civil(Time.current.year, Time.current.month, valid_day(day), hour, min)
+    time  = scheduled_time.utc
+    hour  = time.hour
+    min   = time.min
+    DateTime.civil(Time.current.year, Time.current.month, valid_day(day), hour, min).utc.to_datetime
   end
 
   def valid_day(day)

@@ -18,6 +18,7 @@ class RemindersController < ApplicationController
     @reminder = Reminder.new(reminder_params)
 
     if @reminder.save
+      ReminderMailer.send_reminder(@reminder).deliver_later(wait_until: @reminder.scheduled_date)
       redirect_to edit_reminder_url(@reminder), notice: "Reminder was successfully created."
     else
       flash.now.alert = @reminder.better_errors
@@ -27,6 +28,7 @@ class RemindersController < ApplicationController
 
   def update
     if @reminder.update(reminder_params)
+      ReminderMailer.send_reminder(@reminder).deliver_later(wait_until: @reminder.scheduled_date)
       redirect_to edit_reminder_url(@reminder), notice: "Reminder was successfully updated."
     else
       flash.now.alert = @reminder.better_errors
@@ -40,15 +42,16 @@ class RemindersController < ApplicationController
   end
 
   private
-    def set_reminder
-      @reminder = Reminder.find(params[:id])
-    end
 
-    def reminder_params
-      params.require(:reminder).permit(:title, :body, :user_id, :scheduled_time, :scheduled_day)
-    end
+  def set_reminder
+    @reminder = Reminder.find(params[:id])
+  end
 
-    def authorize_access
-      render file: "public/404.html", status: :unauthorized unless @reminder.user == current_user
-    end
+  def reminder_params
+    params.require(:reminder).permit(:title, :body, :user_id, :scheduled_time, :scheduled_day)
+  end
+
+  def authorize_access
+    render file: "public/404.html", status: :unauthorized unless @reminder.user == current_user
+  end
 end

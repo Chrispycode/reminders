@@ -15,8 +15,7 @@ RSpec.describe "reminders/edit", type: :view do
       assert_select "textarea[name=?]", "reminder[body]"
       assert_select "input[name=?]", "reminder[user_id]"
       assert_select "select[name=?]", "reminder[scheduled_day]"
-      assert_select "select[name=?]", "reminder[scheduled_time(4i)]"
-      assert_select "select[name=?]", "reminder[scheduled_time(5i)]"
+      assert_select "input[name=?]", "reminder[scheduled_time]"
     end
   end
 end

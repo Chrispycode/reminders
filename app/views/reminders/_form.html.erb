@@ -21,8 +21,10 @@
     </div>
   </div>
   <div class="mb-3">
-    <%= form.label :scheduled_time, style: "display: block", class: "form-label" %>
-    <%= form.time_select :scheduled_time, class: "form-control" %>
+    <%= form.label :scheduled_time, class: "form-label" %>
+    <div class="form-row">
+      <div class="col-1"><%= form.time_field :scheduled_time, class: "form-control" %></div>
+    </div>
   </div>
   <div class="mb-3">
     <%= link_to "Back", root_path, class: "btn btn-secondary" %>

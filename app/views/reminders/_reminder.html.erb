@@ -12,7 +12,7 @@
   </div>
   <div class="card-footer">
     <small class="text-muted">
-      <%= "Scheduled for #{reminder.scheduled_date.to_fs(:short)}" %>
+      <%= "Scheduled for #{reminder.scheduled_date.in_time_zone('Europe/Berlin').to_fs(:short)}" %>
     </small>
   </div>
 </div>
