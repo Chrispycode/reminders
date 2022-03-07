@@ -30,11 +30,11 @@ RSpec.describe Reminder, type: :model do
   end
 
   describe "#send_reminder" do
-    let!(:reminder) { create(:reminder, scheduled_time: 1.minute.from_now, scheduled_day: Time.current.day) }
+    let!(:reminder) { create(:reminder, scheduled_time: 1.minute.from_now, scheduled_day: 1.day.ago) }
 
     context "reminder exists" do
       it "should create delayed job" do
-        expect(Reminder.send_reminder(reminder.id)).to be_an(Delayed::Backend::ActiveRecord::Job)
+        expect(Reminder.send_reminder(reminder.id, reminder.updated_at)).to be_an(Delayed::Backend::ActiveRecord::Job)
       end
     end
 
@@ -42,10 +42,26 @@ RSpec.describe Reminder, type: :model do
       it "should return a info message" do
         allow(Rails.logger).to receive(:info)
         reminder.destroy
-        Reminder.send_reminder(reminder.id)
+        Reminder.send_reminder(reminder.id, reminder.updated_at)
 
-        expect(Rails.logger).to have_received(:info).with("Reminder rejected")
+        expect(Rails.logger).to have_received(:info).with("Reminder not found!")
+      end
+    end
 
+    context "reminder updated" do
+      it "should return a info message" do
+        allow(Rails.logger).to receive(:info)
+        Reminder.send_reminder(reminder.id, 1.day.ago)
+
+        expect(Rails.logger).to have_received(:info).with("Reminder expired!")
+      end
+    end
+
+    context "reminder recurrent" do
+      it "should create two new jobs (1 mail, 1 reminder)" do
+        expect {
+          Reminder.send_reminder(reminder.id, reminder.updated_at)
+        }.to change(Delayed::Backend::ActiveRecord::Job, :count).by(+2)
       end
     end
   end

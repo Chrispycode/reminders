@@ -18,7 +18,7 @@ class RemindersController < ApplicationController
     @reminder = Reminder.new(reminder_params)
 
     if @reminder.save
-      Reminder.delay(run_at: @reminder.scheduled_date).send_reminder(@reminder.id)
+      send_mail
       redirect_to edit_reminder_url(@reminder), notice: "Reminder was successfully created."
     else
       flash.now.alert = @reminder.better_errors
@@ -28,7 +28,7 @@ class RemindersController < ApplicationController
 
   def update
     if @reminder.update(reminder_params)
-      Reminder.delay(run_at: @reminder.scheduled_date).send_reminder(@reminder.id)
+      send_mail
       redirect_to edit_reminder_url(@reminder), notice: "Reminder was successfully updated."
     else
       flash.now.alert = @reminder.better_errors
@@ -53,5 +53,9 @@ class RemindersController < ApplicationController
 
   def authorize_access
     render file: "public/404.html", status: :unauthorized unless @reminder.user == current_user
+  end
+
+  def send_mail
+    Reminder.delay(run_at: @reminder.scheduled_date).send_reminder(@reminder.id, @reminder.updated_at)
   end
 end

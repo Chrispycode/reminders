@@ -17,9 +17,10 @@ class Reminder < ApplicationRecord
     -1
   end
 
-  def self.send_reminder(id)
-    return logger.info("Reminder rejected") unless reminder = Reminder.find_by(id: id)
+  def self.send_reminder(id, updated_at)
+    return logger.info("Reminder not found!") unless reminder = Reminder.find_by(id: id)
+    return logger.info("Reminder expired!") unless reminder.updated_at == updated_at
     ReminderMailer.delay.send_reminder(reminder)
-    self.delay(run_at: 1.month.from_now).send_reminder(reminder.id)
+    self.delay(run_at: 1.month.from_now).send_reminder(id, updated_at)
   end
 end
