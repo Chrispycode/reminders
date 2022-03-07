@@ -1,24 +1,29 @@
-# README
+# Reminders
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+Follow these easy steps to install and start the app:
 
-* System dependencies
+### Set up Rails app
 
-* Configuration
+First, install the gems required by the application:
 
-* Database creation
+    bundle
 
-* Database initialization
+next, install the npm packages required by the application:
 
-* How to run the test suite
+    yarn install
 
-* Services (job queues, cache servers, search engines, etc.)
+Next, execute the database migrations/schema setup:
 
-* Deployment instructions
+  bundle exec rails db:setup
 
-* ...
+
+### Start the app
+
+Start the Rails app
+
+    hivemind Procfile.dev
+
+You can find your app now by pointing your browser to [http://localhost:3000](http://localhost:3000)
