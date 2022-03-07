@@ -56,6 +56,6 @@ class RemindersController < ApplicationController
   end
 
   def send_mail
-    Reminder.delay(run_at: @reminder.scheduled_date).send_reminder(@reminder.id, @reminder.updated_at)
+    Reminder.delay(run_at: @reminder.scheduled_date).send_reminder(@reminder.id, @reminder.updated_at, @reminder.scheduled_date)
   end
 end

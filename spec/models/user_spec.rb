@@ -6,10 +6,10 @@ RSpec.describe User, type: :model do
   end
 
   it "must have an email address" do
-    expect(build(:user, email: "")).to_not be_valid
+    expect(build(:user, email: "")).not_to be_valid
   end
 
   it "must have a password" do
-    expect(build(:user, password: "")).to_not be_valid
+    expect(build(:user, password: "")).not_to be_valid
   end
 end

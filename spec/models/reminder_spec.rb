@@ -6,19 +6,19 @@ RSpec.describe Reminder, type: :model do
   end
 
   it "must have an title" do
-    expect(build(:reminder, title: "")).to_not be_valid
+    expect(build(:reminder, title: "")).not_to be_valid
   end
 
   it "must have a user_id" do
-    expect(build(:reminder, user_id: "")).to_not be_valid
+    expect(build(:reminder, user_id: "")).not_to be_valid
   end
 
   it "must have a scheduled_day" do
-    expect(build(:reminder, scheduled_day: "")).to_not be_valid
+    expect(build(:reminder, scheduled_day: "")).not_to be_valid
   end
 
   it "must have a scheduled_time" do
-    expect(build(:reminder, scheduled_time: "")).to_not be_valid
+    expect(build(:reminder, scheduled_time: "")).not_to be_valid
   end
 
   describe "#scheduled_date" do
@@ -32,36 +32,47 @@ RSpec.describe Reminder, type: :model do
   describe "#send_reminder" do
     let!(:reminder) { create(:reminder, scheduled_time: 1.minute.from_now, scheduled_day: 1.day.ago) }
 
-    context "reminder exists" do
-      it "should create delayed job" do
-        expect(Reminder.send_reminder(reminder.id, reminder.updated_at)).to be_an(Delayed::Backend::ActiveRecord::Job)
+    context "with reminder exists" do
+      it "creates delayed job" do
+        expect(
+          described_class.send_reminder(reminder.id, reminder.updated_at, reminder.scheduled_date)
+          ).to be_an(Delayed::Backend::ActiveRecord::Job)
       end
     end
 
-    context "reminder destroyed" do
-      it "should return a info message" do
+    context "with reminder destroyed" do
+      it "returns a info message" do
         allow(Rails.logger).to receive(:info)
         reminder.destroy
-        Reminder.send_reminder(reminder.id, reminder.updated_at)
+        described_class.send_reminder(reminder.id, reminder.updated_at, reminder.scheduled_date)
 
         expect(Rails.logger).to have_received(:info).with("Reminder not found!")
       end
     end
 
-    context "reminder updated" do
-      it "should return a info message" do
+    context "with reminder updated" do
+      it "returns a info message" do
         allow(Rails.logger).to receive(:info)
-        Reminder.send_reminder(reminder.id, 1.day.ago)
+        described_class.send_reminder(reminder.id, 1.day.ago, reminder.scheduled_date)
 
         expect(Rails.logger).to have_received(:info).with("Reminder expired!")
       end
     end
 
-    context "reminder recurrent" do
-      it "should create two new jobs (1 mail, 1 reminder)" do
+    context "with reminder recurrent" do
+      it "creates two new jobs (1 mail, 1 reminder)" do
         expect {
-          Reminder.send_reminder(reminder.id, reminder.updated_at)
+          described_class.send_reminder(reminder.id, reminder.updated_at, reminder.scheduled_date)
         }.to change(Delayed::Backend::ActiveRecord::Job, :count).by(+2)
+      end
+    end
+
+    context "with reminder day in the past" do
+      it "creates only 1 delayed job" do
+        expect {
+          described_class.delay(run_at: 1.minute.ago)
+            .send_reminder(reminder.id, reminder.updated_at, reminder.scheduled_date)
+        }.to change(Delayed::Backend::ActiveRecord::Job, :count).by(+1)
       end
     end
   end
